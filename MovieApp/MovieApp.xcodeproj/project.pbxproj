@@ -35,6 +35,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6D297C2F2A2F3141007D5343 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				6DC6964F2A2DD56B00C3BA76 /* AppDelegate.swift */,
+				6DC696512A2DD56B00C3BA76 /* SceneDelegate.swift */,
+				6DC696582A2DD56D00C3BA76 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		6DC696432A2DD56B00C3BA76 = {
 			isa = PBXGroup;
 			children = (
@@ -54,10 +64,8 @@
 		6DC6964E2A2DD56B00C3BA76 /* MovieApp */ = {
 			isa = PBXGroup;
 			children = (
-				6DC6964F2A2DD56B00C3BA76 /* AppDelegate.swift */,
-				6DC696512A2DD56B00C3BA76 /* SceneDelegate.swift */,
+				6D297C2F2A2F3141007D5343 /* Resources */,
 				6DC696532A2DD56B00C3BA76 /* ViewController.swift */,
-				6DC696582A2DD56D00C3BA76 /* Assets.xcassets */,
 				6DC6965A2A2DD56D00C3BA76 /* LaunchScreen.storyboard */,
 				6DC6965D2A2DD56D00C3BA76 /* Info.plist */,
 			);
