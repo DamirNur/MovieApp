@@ -23,12 +23,11 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(welcomeLabel)
-        updateLabel(with: welcomeLabel.debugDescription)
         
-        AuthManager.shared.makeRequest()
-    }
-    
-    func updateLabel(with text: String) {
-        welcomeLabel.text = text
+        AuthManager.shared.makeRequest { responseModel in
+            DispatchQueue.main.async {
+                self.welcomeLabel.text = responseModel.debugDescription
+            }
+        }
     }
 }
