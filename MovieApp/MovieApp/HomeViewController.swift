@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  HomeViewController.swift
 //  MovieApp
 //
 //  Created by Damir Nuriev on 5.06.2023.
@@ -7,28 +7,21 @@
 
 import UIKit
 
-class ViewController: UIViewController {
-    //static let shared = ViewController()
-    
+class HomeViewController: UIViewController {
     var collectionView: UICollectionView!
     var movieModels: [MovieListModel] = []
-    var posterImages: [UIImage] = []
-    var voteStar = "star"
+    var posterImagesArray: [String: UIImage] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        AuthManager.shared.makeGuestSessionRequest { _ in
-
-        }
+        AuthManager.shared.makeGuestSessionRequest { _ in }
 
         AuthManager.shared.getMovieList { response in
             self.movieModels = response!.results
-            self.downloadPosterImages()
-        }
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            self.setupCollectionView()
+            DispatchQueue.main.sync {
+                self.setupCollectionView()
+            }
         }
     }
     
@@ -46,6 +39,7 @@ class ViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor)
         ])
 
+        collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.showsVerticalScrollIndicator = false
         collectionView.showsHorizontalScrollIndicator = false
@@ -61,24 +55,37 @@ class ViewController: UIViewController {
         return layout
     }
     
-    func downloadPosterImages() {
-        for element in movieModels {
-            let url = URL(string: "https://image.tmdb.org/t/p/w200\(element.posterPath)")
+    private func downloadPosterImage(urlEnd: String, onComplete: @escaping (UIImage) -> Void) {
+        let url = URL(string: "https://image.tmdb.org/t/p/w200\(urlEnd)")
+        let dataTask = URLSession.shared.dataTask(with: url!) { data, response, error in
+            guard let data = data,
+                  let image = UIImage(data: data)
+            else { return }
+            self.posterImagesArray["\(urlEnd)"] = image
+            print("Image will be append")
             
-            let dataTask = URLSession.shared.dataTask(with: url!) { data, response, error in
-                if data != nil, error == nil {
-                    DispatchQueue.main.async {
-                        self.posterImages.append(UIImage(data: data!)!)
-                        print("image will be append")
-                    }
-                }
-            }
-            dataTask.resume()
+            onComplete(image)
         }
+        dataTask.resume()
     }
 }
 
-extension ViewController: UICollectionViewDataSource {
+extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
+    //MARK: - UICollectionViewDelegate
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let movieInformationVC = MovieInformationViewController()
+        
+        movieInformationVC.posterView.image = posterImagesArray[movieModels[indexPath.item].posterPath]
+        movieInformationVC.voteStarView.image = UIImage(systemName: "star")
+        movieInformationVC.voteAverageLabel.text = String(movieModels[indexPath.item].voteAverage)
+        movieInformationVC.nameLabel.text = movieModels[indexPath.item].title
+        movieInformationVC.overviewLabel.text = movieModels[indexPath.item].overview
+        
+        navigationController?.pushViewController(movieInformationVC, animated: true)
+    }
+    
+    //MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         movieModels.count
     }
@@ -91,8 +98,14 @@ extension ViewController: UICollectionViewDataSource {
         }
         cell.nameLabel.text = movieModels[indexPath.item].title
         cell.voteAverageLabel.text = String(movieModels[indexPath.item].voteAverage)
-        cell.voteStarView.image = UIImage(systemName: voteStar)
-        cell.posterView.image = posterImages[indexPath.item]
+        cell.voteStarView.image = UIImage(systemName: "star")
+        
+        let imageUrl = movieModels[indexPath.item].posterPath
+        downloadPosterImage(urlEnd: imageUrl) { image in
+            DispatchQueue.main.sync {
+                cell.posterView.image = image
+            }
+        }
         return cell
     }
 }
