@@ -15,6 +15,10 @@ struct MovieListModel: Decodable {
     let voteAverage: Double
 }
 
+struct NowPlayingListModel: Decodable {
+    
+}
+
 struct CommonListResponseModel<Model: Decodable>: Decodable {
     let page: Int
     let results: [Model]
