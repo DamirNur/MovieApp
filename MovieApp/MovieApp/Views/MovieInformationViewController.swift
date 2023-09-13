@@ -18,7 +18,7 @@ class MovieInformationViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
-        view.backgroundColor = .yellow
+        view.backgroundColor = .white
     }
     
     func setup() {

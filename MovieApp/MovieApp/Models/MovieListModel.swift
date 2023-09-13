@@ -16,7 +16,27 @@ struct MovieListModel: Decodable {
 }
 
 struct NowPlayingListModel: Decodable {
-    
+    let id: Int
+    let title: String
+    let overview: String
+    let posterPath: String
+    let voteAverage: Double
+}
+
+struct TopRatedListModel: Decodable {
+    let id: Int
+    let title: String
+    let overview: String
+    let posterPath: String
+    let voteAverage: Double
+}
+
+struct UpcomingListModel: Decodable {
+    let id: Int
+    let title: String
+    let overview: String
+    let posterPath: String
+    let voteAverage: Double
 }
 
 struct CommonListResponseModel<Model: Decodable>: Decodable {

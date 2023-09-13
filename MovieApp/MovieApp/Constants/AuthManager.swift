@@ -27,9 +27,8 @@ final class AuthManager {
         
     }
     
-    //Guest session
+    // Guest session
     func makeGuestSessionRequest(completion: @escaping (GuestSessionResponseModel?) -> Void) {
-        
         let request = NSMutableURLRequest(url: NSURL(string: "https://api.themoviedb.org/3/authentication/guest_session/new")! as URL,
                                           cachePolicy: .useProtocolCachePolicy,
                                           timeoutInterval: 10.0)
@@ -52,10 +51,9 @@ final class AuthManager {
         dataTask.resume()
     }
     
-    //Movie list
-    func getMovieList(completion: @escaping (CommonListResponseModel<MovieListModel>?) -> Void) {
-        
-        let request = NSMutableURLRequest(url: NSURL(string: "https://api.themoviedb.org/3/discover/movie")! as URL,
+    // Popular movies
+    func getPopularList(completion: @escaping (CommonListResponseModel<MovieListModel>?) -> Void) {
+        let request = NSMutableURLRequest(url: NSURL(string: "https://api.themoviedb.org/3/movie/popular")! as URL,
                                           cachePolicy: .useProtocolCachePolicy,
                                           timeoutInterval: 10.0)
         request.httpMethod = "GET"
@@ -77,8 +75,76 @@ final class AuthManager {
         dataTask.resume()
     }
     
-    //Get Movie Poster
+    // Now Playing movies
+    func getNowPlayingList(completion: @escaping (CommonListResponseModel<NowPlayingListModel>?) -> Void) {
+        let request = NSMutableURLRequest(url: NSURL(string: "https://api.themoviedb.org/3/movie/now_playing")! as URL,
+                                          cachePolicy: .useProtocolCachePolicy,
+                                          timeoutInterval: 10.0)
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = headers
+        
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error -> Void in
+            guard let data = data, error == nil else {
+                return
+            }
+            if (error != nil) {
+                print(error as Any)
+            } else {
+                let result = try? self.decoder.decode(CommonListResponseModel<NowPlayingListModel>.self, from: data)
+                completion(result)
+            }
+        })
+        
+        dataTask.resume()
+    }
     
+    // Top Rated movies
+    func getTopRatedList(completion: @escaping (CommonListResponseModel<TopRatedListModel>?) -> Void) {
+        let request = NSMutableURLRequest(url: NSURL(string: "https://api.themoviedb.org/3/movie/top_rated")! as URL,
+                                          cachePolicy: .useProtocolCachePolicy,
+                                          timeoutInterval: 10.0)
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = headers
+        
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error -> Void in
+            guard let data = data, error == nil else {
+                return
+            }
+            if (error != nil) {
+                print(error as Any)
+            } else {
+                let result = try? self.decoder.decode(CommonListResponseModel<TopRatedListModel>.self, from: data)
+                completion(result)
+            }
+        })
+        
+        dataTask.resume()
+    }
     
+    // Upcoming movies
+    func getUpcomingList(completion: @escaping (CommonListResponseModel<UpcomingListModel>?) -> Void) {
+        let request = NSMutableURLRequest(url: NSURL(string: "https://api.themoviedb.org/3/movie/upcoming")! as URL,
+                                          cachePolicy: .useProtocolCachePolicy,
+                                          timeoutInterval: 10.0)
+        request.httpMethod = "GET"
+        request.allHTTPHeaderFields = headers
+        
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { data, response, error -> Void in
+            guard let data = data, error == nil else {
+                return
+            }
+            if (error != nil) {
+                print(error as Any)
+            } else {
+                let result = try? self.decoder.decode(CommonListResponseModel<UpcomingListModel>.self, from: data)
+                completion(result)
+            }
+        })
+        
+        dataTask.resume()
+    }
 }
 

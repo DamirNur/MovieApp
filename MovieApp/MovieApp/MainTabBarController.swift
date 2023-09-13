@@ -20,12 +20,12 @@ class MainTabBarController: UITabBarController {
     private func generateTabBar() {
         viewControllers = [
             generateVC(viewController: homeNavigationController,
-                       title: "Home",
-                       image: UIImage(systemName: "house.fill")
+                       title: R.Strings.TabBar.home,
+                       image: R.Images.TabBar.home
                       ),
             generateVC(viewController: searchNavigationController,
-                       title: "Search",
-                       image: UIImage(systemName: "magnifyingglass")
+                       title: R.Strings.TabBar.search,
+                       image: R.Images.TabBar.search
                       )
         ]
     }
@@ -37,9 +37,4 @@ class MainTabBarController: UITabBarController {
         viewController.tabBarItem.image = image
         return viewController
     }
-    
-//    private func colorOfNavBar() {
-//        homeNavigationController.navigationBar.backgroundColor = .black
-//        searchNavigationController.navigationBar.backgroundColor = .black
-//    }
 }
