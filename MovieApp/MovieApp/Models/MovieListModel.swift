@@ -7,7 +7,16 @@
 
 import Foundation
 
-struct MovieListModel: Decodable {
+protocol CommonMovieModelProtocol {
+	var id: Int { get }
+	var title: String { get }
+	var overview: String { get }
+	var posterPath: String { get }
+	var backdropPath: String { get }
+	var voteAverage: Double { get }
+}
+
+struct MovieListModel: Decodable, CommonMovieModelProtocol {
     let id: Int
     let title: String
     let overview: String
@@ -16,7 +25,7 @@ struct MovieListModel: Decodable {
     let voteAverage: Double
 }
 
-struct NowPlayingListModel: Decodable {
+struct NowPlayingListModel: Decodable, CommonMovieModelProtocol {
     let id: Int
     let title: String
     let overview: String
@@ -25,7 +34,7 @@ struct NowPlayingListModel: Decodable {
     let voteAverage: Double
 }
 
-struct TopRatedListModel: Decodable {
+struct TopRatedListModel: Decodable, CommonMovieModelProtocol {
     let id: Int
     let title: String
     let overview: String
@@ -34,7 +43,7 @@ struct TopRatedListModel: Decodable {
     let voteAverage: Double
 }
 
-struct UpcomingListModel: Decodable {
+struct UpcomingListModel: Decodable, CommonMovieModelProtocol {
     let id: Int
     let title: String
     let overview: String
