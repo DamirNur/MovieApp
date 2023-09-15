@@ -9,15 +9,17 @@ import UIKit
 
 class MovieInformationViewController: UIViewController {
     
-    var posterView = UIImageView()
-    var nameLabel = UILabel()
-    var overviewLabel = UILabel()
-    var voteAverageLabel = UILabel()
-    var voteStarView = UIImageView()
+    let posterView = UIImageView()
+    let backdropView = UIImageView()
+    let nameLabel = UILabel()
+    let overviewLabel = UILabel()
+    let voteAverageLabel = UILabel()
+    let voteStarView = UIImageView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setup()
+        view.bringSubviewToFront(posterView)
         view.backgroundColor = .white
     }
     
@@ -26,10 +28,15 @@ class MovieInformationViewController: UIViewController {
         posterView.translatesAutoresizingMaskIntoConstraints = false
         posterView.contentMode = .scaleAspectFit
         
+        view.addSubview(backdropView)
+        backdropView.translatesAutoresizingMaskIntoConstraints = false
+        backdropView.contentMode = .scaleAspectFill
+        
         view.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.contentMode = .scaleAspectFill
         nameLabel.textColor = .black
+        nameLabel.font = R.Fonts.helvelticaRegular(with: 24)
         nameLabel.numberOfLines = 0
         nameLabel.sizeToFit()
         nameLabel.textAlignment = .center
@@ -39,6 +46,7 @@ class MovieInformationViewController: UIViewController {
         overviewLabel.translatesAutoresizingMaskIntoConstraints = false
         overviewLabel.contentMode = .scaleAspectFill
         overviewLabel.textColor = .black
+        overviewLabel.font = R.Fonts.helvelticaRegular(with: 14)
         overviewLabel.numberOfLines = 0
         overviewLabel.textAlignment = .left
         overviewLabel.lineBreakMode = .byWordWrapping
@@ -55,24 +63,29 @@ class MovieInformationViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             posterView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100),
-            posterView.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 500),
+            posterView.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 400),
             posterView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             posterView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            voteStarView.topAnchor.constraint(equalTo: posterView.bottomAnchor, constant: 5),
-            voteStarView.bottomAnchor.constraint(equalTo: posterView.bottomAnchor, constant: 30),
-            voteStarView.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: -30),
-            voteStarView.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -5),
+            backdropView.topAnchor.constraint(equalTo: view.topAnchor),
+            backdropView.bottomAnchor.constraint(equalTo: view.topAnchor, constant: 400),
+            backdropView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backdropView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             
-            voteAverageLabel.topAnchor.constraint(equalTo: posterView.bottomAnchor, constant: 5),
-            voteAverageLabel.bottomAnchor.constraint(equalTo: posterView.bottomAnchor, constant: 30),
-            voteAverageLabel.leadingAnchor.constraint(equalTo: view.centerXAnchor),
-            voteAverageLabel.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: 50),
+            nameLabel.topAnchor.constraint(equalTo: posterView.bottomAnchor),
+            nameLabel.bottomAnchor.constraint(equalTo: posterView.bottomAnchor, constant: 60),
+            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
             
-            nameLabel.topAnchor.constraint(equalTo: voteStarView.bottomAnchor, constant: 5),
-            nameLabel.bottomAnchor.constraint(equalTo: voteStarView.bottomAnchor, constant: 65),
-            nameLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
-            nameLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -50),
+//            voteStarView.topAnchor.constraint(equalTo: posterView.bottomAnchor, constant: 5),
+//            voteStarView.bottomAnchor.constraint(equalTo: posterView.bottomAnchor, constant: 30),
+//            voteStarView.leadingAnchor.constraint(equalTo: view.centerXAnchor, constant: -30),
+//            voteStarView.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: -5),
+//
+//            voteAverageLabel.topAnchor.constraint(equalTo: posterView.bottomAnchor, constant: 5),
+//            voteAverageLabel.bottomAnchor.constraint(equalTo: posterView.bottomAnchor, constant: 30),
+//            voteAverageLabel.leadingAnchor.constraint(equalTo: view.centerXAnchor),
+//            voteAverageLabel.trailingAnchor.constraint(equalTo: view.centerXAnchor, constant: 50),
             
             overviewLabel.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 5),
             overviewLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 15),

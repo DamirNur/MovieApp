@@ -51,6 +51,9 @@ final class AuthManager {
         dataTask.resume()
     }
     
+    // Get list of movie genres
+    
+    
     // Popular movies
     func getPopularList(completion: @escaping (CommonListResponseModel<MovieListModel>?) -> Void) {
         let request = NSMutableURLRequest(url: NSURL(string: "https://api.themoviedb.org/3/movie/popular")! as URL,

@@ -9,8 +9,8 @@ import UIKit
 
 class MovieCell: UICollectionViewCell {
     
-    var nameLabel = UILabel()
-    var posterView = UIImageView()
+    let nameLabel = UILabel()
+    let posterView = UIImageView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -26,7 +26,8 @@ class MovieCell: UICollectionViewCell {
         self.contentView.addSubview(posterView)
         posterView.translatesAutoresizingMaskIntoConstraints = false
         posterView.contentMode = .scaleAspectFit
-        //posterView.layer.cornerRadius = 30
+        posterView.layer.cornerRadius = 10
+        posterView.layer.masksToBounds = true
         
         self.contentView.addSubview(nameLabel)
         nameLabel.translatesAutoresizingMaskIntoConstraints = false

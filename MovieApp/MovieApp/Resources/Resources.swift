@@ -30,7 +30,7 @@ enum R {
     
     enum Images {
         enum Common {
-            static let ratingStar = UIImage(systemName: "star")
+            static let ratingStar = UIImage(systemName: "star.fill")
             static let rightArrow = UIImage(systemName: "chevron.forward")
         }
         
@@ -41,6 +41,6 @@ enum R {
     }
     
     enum Colors {
-        static let mainBackground = UIColor(red: 36, green: 39, blue: 42, alpha: 0)
+        static let mainBackground = UIColor(red: 56, green: 57, blue: 80, alpha: 0)
     }
 }

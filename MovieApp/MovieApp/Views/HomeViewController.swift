@@ -13,7 +13,8 @@ class HomeViewController: UIViewController {
     var nowPlayingMovieModel: [NowPlayingListModel] = []
     var topRatedMovieModel: [TopRatedListModel] = []
     var upcomingMovieModel: [UpcomingListModel] = []
-    var moviePosterImagesArray: [String: UIImage] = [:]
+    var moviePosterImagesDictionary: [String: UIImage] = [:]
+    var movieBackdropImagesDictionary: [String: UIImage] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -176,7 +177,21 @@ class HomeViewController: UIViewController {
             guard let data = data,
                   let image = UIImage(data: data)
             else { return }
-            self.moviePosterImagesArray["\(urlEnd)"] = image
+            self.moviePosterImagesDictionary["\(urlEnd)"] = image
+            print("Image will be append")
+            
+            onComplete(image)
+        }
+        dataTask.resume()
+    }
+    
+    private func downloadBackdropImage(urlEnd: String, onComplete: @escaping (UIImage) -> Void) {
+        let url = URL(string: "https://image.tmdb.org/t/p/w500\(urlEnd)")
+        let dataTask = URLSession.shared.dataTask(with: url!) { data, response, error in
+            guard let data = data,
+                  let image = UIImage(data: data)
+            else { return }
+            self.movieBackdropImagesDictionary["\(urlEnd)"] = image
             print("Image will be append")
             
             onComplete(image)
@@ -193,25 +208,49 @@ extension HomeViewController: UICollectionViewDelegate {
         let movieInformationVC = MovieInformationViewController()
         
         if indexPath.section == 0 {
-            movieInformationVC.posterView.image = moviePosterImagesArray[nowPlayingMovieModel[indexPath.item].posterPath]
+            movieInformationVC.posterView.image = moviePosterImagesDictionary[nowPlayingMovieModel[indexPath.item].posterPath]
+            let imageUrl = nowPlayingMovieModel[indexPath.item].backdropPath
+            downloadPosterImage(urlEnd: imageUrl) { image in
+                DispatchQueue.main.sync {
+                    movieInformationVC.backdropView.image = image
+                }
+            }
             movieInformationVC.voteStarView.image = R.Images.Common.ratingStar
             movieInformationVC.voteAverageLabel.text = String(nowPlayingMovieModel[indexPath.item].voteAverage)
             movieInformationVC.nameLabel.text = nowPlayingMovieModel[indexPath.item].title
             movieInformationVC.overviewLabel.text = nowPlayingMovieModel[indexPath.item].overview
         } else if indexPath.section == 1 {
-            movieInformationVC.posterView.image = moviePosterImagesArray[popularMovieModel[indexPath.item].posterPath]
+            movieInformationVC.posterView.image = moviePosterImagesDictionary[popularMovieModel[indexPath.item].posterPath]
+            let imageUrl = popularMovieModel[indexPath.item].backdropPath
+            downloadPosterImage(urlEnd: imageUrl) { image in
+                DispatchQueue.main.sync {
+                    movieInformationVC.backdropView.image = image
+                }
+            }
             movieInformationVC.voteStarView.image = R.Images.Common.ratingStar
             movieInformationVC.voteAverageLabel.text = String(popularMovieModel[indexPath.item].voteAverage)
             movieInformationVC.nameLabel.text = popularMovieModel[indexPath.item].title
             movieInformationVC.overviewLabel.text = popularMovieModel[indexPath.item].overview
         } else if indexPath.section == 2 {
-            movieInformationVC.posterView.image = moviePosterImagesArray[topRatedMovieModel[indexPath.item].posterPath]
+            movieInformationVC.posterView.image = moviePosterImagesDictionary[topRatedMovieModel[indexPath.item].posterPath]
+            let imageUrl = topRatedMovieModel[indexPath.item].backdropPath
+            downloadPosterImage(urlEnd: imageUrl) { image in
+                DispatchQueue.main.sync {
+                    movieInformationVC.backdropView.image = image
+                }
+            }
             movieInformationVC.voteStarView.image = R.Images.Common.ratingStar
             movieInformationVC.voteAverageLabel.text = String(topRatedMovieModel[indexPath.item].voteAverage)
             movieInformationVC.nameLabel.text = topRatedMovieModel[indexPath.item].title
             movieInformationVC.overviewLabel.text = topRatedMovieModel[indexPath.item].overview
         } else {
-            movieInformationVC.posterView.image = moviePosterImagesArray[upcomingMovieModel[indexPath.item].posterPath]
+            movieInformationVC.posterView.image = moviePosterImagesDictionary[upcomingMovieModel[indexPath.item].posterPath]
+            let imageUrl = upcomingMovieModel[indexPath.item].backdropPath
+            downloadPosterImage(urlEnd: imageUrl) { image in
+                DispatchQueue.main.sync {
+                    movieInformationVC.backdropView.image = image
+                }
+            }
             movieInformationVC.voteStarView.image = R.Images.Common.ratingStar
             movieInformationVC.voteAverageLabel.text = String(upcomingMovieModel[indexPath.item].voteAverage)
             movieInformationVC.nameLabel.text = upcomingMovieModel[indexPath.item].title

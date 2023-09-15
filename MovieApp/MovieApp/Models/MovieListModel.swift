@@ -12,6 +12,7 @@ struct MovieListModel: Decodable {
     let title: String
     let overview: String
     let posterPath: String
+    let backdropPath: String
     let voteAverage: Double
 }
 
@@ -20,6 +21,7 @@ struct NowPlayingListModel: Decodable {
     let title: String
     let overview: String
     let posterPath: String
+    let backdropPath: String
     let voteAverage: Double
 }
 
@@ -28,6 +30,7 @@ struct TopRatedListModel: Decodable {
     let title: String
     let overview: String
     let posterPath: String
+    let backdropPath: String
     let voteAverage: Double
 }
 
@@ -36,6 +39,7 @@ struct UpcomingListModel: Decodable {
     let title: String
     let overview: String
     let posterPath: String
+    let backdropPath: String
     let voteAverage: Double
 }
 
