@@ -19,27 +19,40 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        
-        AuthManager.shared.makeGuestSessionRequest { _ in }
-        
+		let downloadGroup = DispatchGroup()
+
+		downloadGroup.enter()
+        AuthManager.shared.makeGuestSessionRequest { _ in
+			downloadGroup.leave()
+		}
+
+		downloadGroup.enter()
         AuthManager.shared.getNowPlayingList { response in
             self.nowPlayingMovieModel = response!.results
+			downloadGroup.leave()
         }
 
+		downloadGroup.enter()
         AuthManager.shared.getPopularList { response in
             self.popularMovieModel = response!.results
+			downloadGroup.leave()
         }
-        
+
+		downloadGroup.enter()
         AuthManager.shared.getTopRatedList { response in
             self.topRatedMovieModel = response!.results
+			downloadGroup.leave()
         }
-        
+
+		downloadGroup.enter()
         AuthManager.shared.getUpcomingList { response in
             self.upcomingMovieModel = response!.results
-            DispatchQueue.main.sync {
-                self.setupCollectionView()
-            }
+			downloadGroup.leave()
         }
+
+		downloadGroup.notify(queue: DispatchQueue.main) {
+			self.setupCollectionView()
+		}
     }
     
     func setupCollectionView() {
@@ -91,7 +104,6 @@ class HomeViewController: UIViewController {
             layoutSize: headerSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top)
-        sectionHeader.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 280)
         
         let section = NSCollectionLayoutSection(group: group)
         section.boundarySupplementaryItems = [sectionHeader]
@@ -115,7 +127,6 @@ class HomeViewController: UIViewController {
             layoutSize: headerSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top)
-        sectionHeader.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 315)
         
         let section = NSCollectionLayoutSection(group: group)
         section.boundarySupplementaryItems = [sectionHeader]
@@ -139,7 +150,6 @@ class HomeViewController: UIViewController {
             layoutSize: headerSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top)
-        sectionHeader.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 295)
         
         let section = NSCollectionLayoutSection(group: group)
         section.boundarySupplementaryItems = [sectionHeader]
@@ -163,7 +173,6 @@ class HomeViewController: UIViewController {
             layoutSize: headerSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .top)
-        sectionHeader.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 295)
         
         let section = NSCollectionLayoutSection(group: group)
         section.boundarySupplementaryItems = [sectionHeader]
@@ -186,7 +195,7 @@ class HomeViewController: UIViewController {
     }
     
     private func downloadBackdropImage(urlEnd: String, onComplete: @escaping (UIImage) -> Void) {
-        let url = URL(string: "https://image.tmdb.org/t/p/w500\(urlEnd)")
+        let url = URL(string: "https://image.tmdb.org/t/p/w400\(urlEnd)")
         let dataTask = URLSession.shared.dataTask(with: url!) { data, response, error in
             guard let data = data,
                   let image = UIImage(data: data)
@@ -210,7 +219,7 @@ extension HomeViewController: UICollectionViewDelegate {
         if indexPath.section == 0 {
             movieInformationVC.posterView.image = moviePosterImagesDictionary[nowPlayingMovieModel[indexPath.item].posterPath]
             let imageUrl = nowPlayingMovieModel[indexPath.item].backdropPath
-            downloadPosterImage(urlEnd: imageUrl) { image in
+			downloadBackdropImage(urlEnd: imageUrl) { image in
                 DispatchQueue.main.sync {
                     movieInformationVC.backdropView.image = image
                 }

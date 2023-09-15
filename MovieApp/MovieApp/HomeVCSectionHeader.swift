@@ -12,7 +12,8 @@ class HomeVCSectionHeader: UICollectionReusableView {
     
     var title = UILabel()
     var arrow = UIImageView()
-    
+	let emptyView = UIView()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         
@@ -33,11 +34,16 @@ class HomeVCSectionHeader: UICollectionReusableView {
         arrow.image = R.Images.Common.rightArrow
         arrow.tintColor = .black
         arrow.translatesAutoresizingMaskIntoConstraints = false
+
+		emptyView.translatesAutoresizingMaskIntoConstraints = false
+		emptyView.backgroundColor = .clear
+		emptyView.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
     
     public func setupConstraints() {
         addSubview(title)
         addSubview(arrow)
+		addSubview(emptyView)
         NSLayoutConstraint.activate([
             title.topAnchor.constraint(equalTo: topAnchor),
             title.bottomAnchor.constraint(equalTo: bottomAnchor),
@@ -46,7 +52,12 @@ class HomeVCSectionHeader: UICollectionReusableView {
             arrow.topAnchor.constraint(equalTo: topAnchor),
             arrow.bottomAnchor.constraint(equalTo: bottomAnchor),
             arrow.leadingAnchor.constraint(equalTo: title.trailingAnchor),
-            arrow.trailingAnchor.constraint(equalTo: trailingAnchor)
+			arrow.trailingAnchor.constraint(equalTo: emptyView.leadingAnchor),
+
+			emptyView.topAnchor.constraint(equalTo: topAnchor),
+			emptyView.bottomAnchor.constraint(equalTo: bottomAnchor),
+			emptyView.leadingAnchor.constraint(equalTo: arrow.trailingAnchor),
+			emptyView.trailingAnchor.constraint(equalTo: trailingAnchor)
         ])
     }
 }
